@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Cadastro de Pessoa Física</title> 
+    <style>
+       *{
+            box-sizing: border-box;
+        }
+        body{
+            font-size: 100%;
+        }
+        h1,h2{
+            font: bold 2.17em georgia,serif;
+            text-align: center;
+            margin: 20px auto 40px auto;
+            width: 50%;
+            border: 2px solid ghostwhite;
+            border-radius: 6px;
+            box-shadow: 0 0 8px 2px rgb(205, 205, 207);
+        }
+        div{
+            margin: 10px auto auto auto;
+            width: 50%;
+        }
+        label{
+            font: 1em verdana,sans-serif;
+        }
+        input[type='text'],input[type='email'],input[type='date'],input[type='tel']{
+            font: 1em verdana,sans-serif;
+            border: none;
+            border-bottom: 1px solid black;
+            padding: 5px 5px;
+            margin: 10px 0;
+        }
+        input:invalid{
+            box-shadow: 0 0 5px 1px red;
+        }
+        input:focus:invalid{
+            box-shadow: none;
+            transition-duration: 0.5s;
+        }
+        .button{
+            font: 1em verdana,sans-serif;
+            padding: 10px 10px;
+            margin: 10px 0;
+            border: 1px solid black;
+            border-radius: 12px;
+            background-color: white;
+            color: black;
+            transition-duration: 0.5s;
+        }
+        .button:hover{
+            background-color:#e7e7e7;
+        }
+        .error {
+            width  : 100%;
+            padding: 0;
+
+            font-size: 80%;
+            color: white;
+            background-color: #900;
+            border-radius: 0 0 5px 5px;
+
+            box-sizing: border-box;
+        }
+
+        .error.active {
+            padding: 0.3em;
+        }
+    </style>
+</head>
+
+<body>
+    <form novalidate>
+        <h1><hr>Informações Pessoais<hr></h1>
+        <div>
+            <label for="nome">Nome completo:<abbr title="Preenchimento obrigatório.">*</abbr></label>
+            <input type="text" required id="nome" name="nome" onblur="getCheckedNome()">
+            <span style="display: none;" id="erroNome"></span>
+        </div>
+        <div>    
+            <label for="email">E-mail:<abbr title="Preenchimento obrigatório.">*</abbr></label>
+            <input type="email" required id="email" name="email" onblur="getCheckedEmail()">
+            <span style="display: none;" id="erroEmail"></span>
+        </div>
+        <div>
+            <label for="nomeMãe">Nome da mãe:</label>
+            <input type="text" id="nomeMae" name="nomeMae" onblur="getCheckedNomeMae()">
+            <span style="display: none;" id="erroNomeMae"></span>
+        </div>
+        <div>
+            <label for="nomePai">Nome do pai:</label>
+            <input type="text" id="nomePai" name="nomePai" onblur="getCheckedNomePai()">
+            <span style="display: none;" id="erroNomePai"></span>
+        </div>
+        <div>
+            <label for="nascimento">Data de nascimento:<abbr title="Preenchimento obrigatório.">*</abbr></label>
+            <input type="date" required id="nascimento" name="nascimento">            
+        </div>
+        <div>
+            <label for="rg">RG:</label>
+            <input type="text" id="rg" name="rg" title="Somente números." onblur="getCheckedRG()" size="9">
+            <span style="display: none;" id="erroRG"></span>
+        </div>
+        <div>    
+            <label for="cpf">CPF:<abbr title="Preenchimento obrigatório.">*</abbr></label>
+            <input type="text" required id="cpf" name="cpf" title="Somente números." onblur="getCheckedCPF()" size="11">
+            <span style="display: none;" id="erroCPF"></span>
+        </div>
+        <div>    
+            <label for="telefone">Número de telefone:<abbr title="Preenchimento obrigatório.">*</abbr></label>
+            <input type="tel" required id="tel1" name="tel1" title="Somente números, com ddd." onblur="getCheckedTel1()" size="11">
+            <span style="display: none;" id="erroTel1"></span>
+        </div>
+        <div>    
+            <label for="telefone">Número de telefone (2):</label>
+            <input type="tel" id="tel2" name="tel2" title="Somente números, com ddd." onblur="getCheckedTel2()" size="11">
+            <span style="display: none;" id="erroTel2"></span>
+        </div>
+        <div>    
+            <label for="telefone">Número de telefone (3):</label>
+            <input type="tel" id="tel3" name="tel3" title="Somente números, com ddd." onblur="getCheckedTel3()" size="11">
+            <span style="display: none;" id="erroTel3"></span>
+        </div>
+
+        <h2><hr>Endereço<hr></h2>
+        <div>
+            <label for="rua">Rua:<abbr title="Preenchimento obrigatório.">*</abbr></label>
+            <input type="text" required id="rua" name="rua" onblur="getCheckedRua()">
+            <span style="display: none;" id="erroRua"></span>
+        </div>
+        <div>    
+            <label for="numero">Número:<abbr title="Preenchimento obrigatório.">*</abbr></label>
+            <input type="text" required id="numero" name="numero" onblur="getCheckedNumero()" size="4">
+            <span style="display: none;" id="erroNumero"></span>
+        </div>
+        <div>
+            <label for="complemento">Complemento:</label>
+            <input type="text" id="complemento" name="complemento" onblur="getCheckedComplemento()">
+            <span style="display: none;" id="erroComplemento"></span>
+        </div>
+        <div>    
+            <label for="cep">CEP:<abbr title="Preenchimento obrigatório.">*</abbr></label>
+            <input type="text" required id="cep" name="cep" onblur="getCheckedCEP()" size="8">
+            <span style="display: none;" id="erroCEP"></span>
+        </div>
+        <div>    
+            <label for="municipio">Município:<abbr title="Preenchimento obrigatório.">*</abbr></label>
+            <input type="text" required id="municipio" name="municipio" onblur="getCheckedMun()">
+            <span style="display: none;" id="erroMun"></span>
+        </div>
+        <div>    
+            <label for="uf"><abbr title="Unidade da Federação">UF:</abbr><abbr title="Preenchimento obrigatório.">*</abbr></label>
+            <input type="text" required id="uf" name="uf" title="Somente as iniciais." onblur="getCheckedUF()" size="2">
+            <span style="display: none;" id="erroUF"></span>
+        </div>
+        <div>    
+            <label for="nacao">País:<abbr title="Preenchimento obrigatório.">*</abbr></label>
+            <input type="text" required id="nacao" name="nacao" onblur="getCheckedP()">
+            <span style="display: none;" id="erroP"></span>
+        </div>
+        <div>
+            <button class='button' type="submit">Enviar</button>
+        </div>
+    </form>
+
+    <script>
+        const form = document.getElementsByTagName('form')[0];
+        form.addEventListener('submit', function (event) {
+            if (!nome.validity.valid || !email.validity.valid || !nomeMae.validity.valid || 
+            !nomePai.validity.valid || !rg.validity.valid || !cpf.validity.valid ||
+            !tel1.validity.valid || !tel2.validity.valid || !tel3.validity.valid ||
+            !rua.validity.valid || !numero.validity.valid || !comp.validity.valid ||
+            !cep.validity.valid || !mun.validity.valid || !uf.validity.valid || !p.validity.valid) {
+               
+                alert('Há dados cadastrais inválidos.');
+                event.preventDefault();
+            } else {
+                
+                alert('Cadastro feito com sucesso!');
+            }
+        })
+       
+        function getCheckedNome() {
+            
+            let nome = document.getElementById('nome').value;            
+            console.log(nome);
+            
+            const regex = /^[A-Za-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ']+$/i;
+            
+            const validoNome = nome.split(/ +/).every(parte => regex.test(parte));
+            console.log(validoNome);
+            
+            const erroNome = document.querySelector('#erroNome');
+            
+            if (validoNome === false) {
+            
+                nome = document.querySelector('#nome').setCustomValidity('Nome inválido.');
+                
+                erroNome.style.display  = 'block';
+            
+                erroNome.textContent = 'Nome inválido.';
+            
+                erroNome.style.color = 'red';
+            } else {
+            
+                document.querySelector('#nome').setCustomValidity('');
+                
+                erroNome.style.display  = 'none';
+            
+                erroNome.textContent = '';
+            }
+        }
+
+        function getCheckedEmail() {
+            
+            let email = document.getElementById('email').value;            
+            console.log(email);
+            
+            const regex = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/i;
+            
+            const validoEmail = regex.test(email);            
+            console.log(validoEmail);
+            
+            const erroEmail = document.querySelector('#erroEmail');
+            
+            if (validoEmail === false) {
+            
+                email = document.querySelector('#email').setCustomValidity('Email inválido.');
+            
+                erroEmail.style.display  = 'block';
+            
+                erroEmail.textContent = 'Email inválido.';
+            
+                erroEmail.style.color = 'red';
+            } else {
+            
+                document.querySelector('#email').setCustomValidity('');
+            
+                erroEmail.style.display  = 'none';
+            
+                erroEmail.textContent = '';
+            }
+        }
+
+        function getCheckedNomeMae() {
+            
+            let nomeMae = document.getElementById('nomeMae').value; 
+            console.log(nomeMae);
+            
+            const regex = /^[A-Za-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ']+$/i;
+            
+            const validoNomeMae = nomeMae.split(/ +/).every(parte => regex.test(parte)); 
+            console.log(validoNomeMae);
+            
+            const erroNomeMae = document.querySelector('#erroNomeMae');
+            
+            if (validoNomeMae === false) {
+            
+                nomeMae = document.getElementById('nomeMae').setCustomValidity('Nome inválido.');
+                
+                erroNomeMae.style.display = 'block';
+            
+                erroNomeMae.style.color = 'red';
+            
+                erroNomeMae.textContent = 'Nome inválido.';
+            } else {
+            
+                document.getElementById('nomeMae').setCustomValidity('');
+            
+                erroNomeMae.style.display = 'none';
+            
+                erroNomeMae.textContent = '';
+            }
+        }
+
+        function getCheckedNomePai() {
+            let nomePai = document.getElementById('nomePai').value; console.log(nomePai);
+            
+            const regex = /^[A-Za-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ']+$/i;
+            
+            const validoNomePai = nomePai.split(/ +/).every(parte => regex.test(parte)); 
+            console.log(validoNomePai);
+            
+            const erroNomePai = document.querySelector('#erroNomePai');
+            
+            if (validoNomePai === false) {
+            
+                nomePai = document.getElementById('nomePai').setCustomValidity('Nome inválido.');
+            
+                erroNomePai.style.display = 'block';
+            
+                erroNomePai.style.color = 'red';
+            
+                erroNomePai.textContent = 'Nome inválido.';
+            } else {
+            
+                document.getElementById('nomePai').setCustomValidity('');
+            
+                erroNomePai.style.display = 'none';
+            
+                erroNomePai.textContent = '';
+            }
+        }
+
+        function getCheckedRG() {
+            
+            let rg = document.getElementById('rg').value; console.log(rg);
+
+            const regex = /[0-9]{9}/;
+
+            const validoRG = regex.test(rg); 
+            console.log(validoRG);
+
+            const erroRG = document.querySelector('#erroRG');
+
+            if (validoRG === false) {
+                
+                 rg = document.querySelector('#rg').setCustomValidity('RG inválido.');
+
+                erroRG.style.display = 'block';
+                
+                erroRG.style.color = 'red';
+
+                erroRG.textContent = 'RG inválido.'
+            } else {
+                
+                document.querySelector('#rg').setCustomValidity('');
+
+                erroRG.style.display = 'none';
+
+                erroRG.textContent = '';
+            }
+        }
+
+        function getCheckedCPF() {
+            
+            let cpf = document.getElementById('cpf').value; 
+            console.log(cpf);
+
+            const regex = /[0-9]{11}/;
+
+            const validoCPF = regex.test(cpf); 
+            console.log(validoCPF);
+
+            const erroCPF = document.querySelector('#erroCPF');
+
+            if (validoCPF === false) {
+                
+                cpf = document.querySelector('#cpf').setCustomValidity('CPF inválido.');
+
+                erroCPF.style.display = 'block';
+                
+                erroCPF.style.color = 'red';
+
+                erroCPF.textContent = 'CPF inválido.'
+            } else {
+                
+                document.querySelector('#cpf').setCustomValidity('');
+
+                erroCPF.style.display = 'none';
+
+                erroCPF.textContent = '';
+            }
+        }
+
+        function getCheckedTel1() {
+            
+            let tel1 = document.getElementById('tel1').value; 
+            console.log(tel1);
+
+            const regex = /[0-9]{11}/;
+
+            const validoTel1 = regex.test(tel1);
+            console.log(validoTel1);
+
+            const erroTel1 = document.querySelector('#erroTel1');
+
+            if (validoTel1 === false) {
+                
+                tel1 = document.querySelector('#tel1').setCustomValidity('Telefone inválido.');
+                
+                erroTel1.style.display = 'block';
+
+                erroTel1.style.color = 'red';
+
+                erroTel1.textContent = 'Telefone inválido.';
+            } else{
+
+                document.querySelector('#tel1').setCustomValidity('');
+
+                erroTel1.style.display = 'none';
+
+                erroTel1.textContent = '';
+            }
+        }
+
+        function getCheckedTel2() {
+            
+            let tel2 = document.getElementById('tel2').value; 
+            console.log(tel2);
+
+            const regex = /[0-9]{11}/;
+
+            const validoTel2 = regex.test(tel2);
+            console.log(validoTel2);
+
+            const erroTel2 = document.querySelector('#erroTel2');
+
+            if (validoTel2 === false) {
+                
+                tel2 = document.querySelector('#tel2').setCustomValidity('Telefone inválido.');
+                
+                erroTel2.style.display = 'block';
+
+                erroTel2.style.color = 'red';
+
+                erroTel2.textContent = 'Telefone inválido.';
+            } else{
+
+                document.querySelector('#tel2').setCustomValidity('');
+
+                erroTel2.style.display = 'none';
+
+                erroTel2.textContent = '';
+            }
+        }
+
+        function getCheckedTel3() {
+            
+            let tel3 = document.getElementById('tel3').value; 
+            console.log(tel3);
+
+            const regex = /[0-9]{11}/;
+
+            const validoTel3 = regex.test(tel3);
+            console.log(validoTel3);
+
+            const erroTel3 = document.querySelector('#erroTel3');
+
+            if (validoTel3 === false) {
+                
+                tel3 = document.querySelector('#tel3').setCustomValidity('Telefone inválido.');
+                
+                erroTel3.style.display = 'block';
+
+                erroTel3.style.color = 'red';
+
+                erroTel3.textContent = 'Telefone inválido.';
+            } else{
+
+                document.querySelector('#tel3').setCustomValidity('');
+
+                erroTel3.style.display = 'none';
+
+                erroTel3.textContent = '';
+            }
+        }
+
+        function getCheckedRua() {
+            
+            let rua = document.getElementById('rua').value;            
+            console.log(rua);
+            
+            const regex = /^[A-Za-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ']+$/i;
+            
+            const validoRua = rua.split(/ +/).every(parte => regex.test(parte));
+            console.log(validoRua);
+            
+            const erroRua = document.querySelector('#erroRua');
+            
+            if (validoRua === false) {
+            
+                rua = document.querySelector('#rua').setCustomValidity('Rua inválida.');
+            
+                erroRua.style.display  = 'block';
+            
+                erroRua.textContent = 'Rua inválida.';
+            
+                erroRua.style.color = 'red';
+            } else {
+            
+                document.querySelector('#rua').setCustomValidity('');
+            
+                erroRua.style.display  = 'none';
+            
+                erroRua.textContent = '';
+            }
+        }
+
+        function getCheckedNumero() {
+            
+            let numero = document.getElementById('numero').value;            
+            console.log(numero);
+            
+            const regex = /\d{1,}/;
+            
+            const validoNumero = regex.test(numero);
+            console.log(validoNumero);
+            
+            const erroNumero = document.querySelector('#erroNumero');
+            
+            if (validoNumero === false) {
+            
+                numero = document.querySelector('#numero').setCustomValidity('Número inválido.');
+            
+                erroNumero.style.display  = 'block';
+            
+                erroNumero.textContent = 'Número inválido.';
+            
+                erroNumero.style.color = 'red';
+            } else {
+            
+                document.querySelector('#numero').setCustomValidity('');
+            
+                erroNumero.style.display  = 'none';
+            
+                erroNumero.textContent = '';
+            }
+        }
+
+        function getCheckedComplemento() {
+            
+            let comp = document.querySelector('#complemento').value;
+            console.log(comp);
+
+            const regex = /^[A-Za-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ'\d]+$/i;
+
+            const validoComp = comp.split(/ +/).every(parte => regex.test(parte));
+            console.log(validoComp);
+
+            const erroComplemento = document.querySelector('#erroComplemento');
+
+            if (validoComp === false) {
+                
+                comp = document.getElementById('complemento').setCustomValidity('Complemento inválido.');
+
+                erroComplemento.style.display = 'block';
+
+                erroComplemento.style.color = 'red';
+
+                erroComplemento.textContent = 'Complemento inválido.';
+            } else {
+
+                document.getElementById('complemento').setCustomValidity('');
+
+                erro.style.display = 'none';
+
+                erro.textContent = '';
+            }
+        }
+
+        function getCheckedCEP() {
+            
+            let cep = document.getElementById('cep').value;
+            console.log(cep);
+
+            const regex = /\d{8}/;
+
+            const validoCEP = regex.test(cep);
+            console.log(validoCEP);
+
+            const erroCEP = document.getElementById('erroCEP');
+
+            if (validoCEP === false) {
+                
+                cep = document.getElementById('cep').setCustomValidity('CEP inválido.');
+
+                erroCEP.style.display = 'block';
+
+                erroCEP.style.color = 'red';
+
+                erroCEP.textContent = 'CEP inválido.';
+            } else {
+                
+                document.getElementById('cep').setCustomValidity('');
+
+                erroCEP.style.display = 'none';
+
+                erroCEP.textContent = '';
+            }
+        }
+
+        function getCheckedMun() {
+            
+            let mun = document.getElementById('municipio').value;
+            console.log(mun);
+
+            const regex = /^[A-Za-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ']+$/i;
+
+            const validoMun = mun.split(/ +/).every(parte => regex.test(parte));
+            console.log(validoMun);
+
+            const erroMun = document.getElementById('erroMun');
+
+            if (validoMun === false) {
+                
+                mun = document.getElementById('municipio').setCustomValidity('Município inválido.');
+
+                erroMun.style.display = 'block';
+
+                erroMun.style.color = 'red';
+
+                erroMun.textContent = 'Município inválido.';
+            } else {
+                
+                document.getElementById('municipio').setCustomValidity('');
+
+                erroMun.style.display = 'none';
+
+                erroMun.textContent = '';
+            }
+        }
+
+        function getCheckedUF() {
+            
+            let uf = document.getElementById('uf').value;
+            console.log(uf);
+            
+            const regex = /^[A-Za-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ']{2}$/i;
+
+            const validoUF = uf.split(/ +/).every(parte => regex.test(parte));
+            console.log(uf);
+
+            const erroUF = document.getElementById('erroUF');
+
+            if (validoUF === false) {
+                
+                uf = document.getElementById('uf').setCustomValidity('UF inválida.');
+
+                erroUF.style.display = 'block';
+
+                erroUF.style.color = 'red';
+
+                erroUF.textContent = 'UF inválida.';
+            } else {
+                
+                document.getElementById('uf').setCustomValidity('');
+
+                erroUF.style.display = 'none';
+                erroUF.textContent = '';
+            }
+        }
+
+        function getCheckedP() {
+         
+            let p = document.getElementById('nacao').value;
+            console.log(p);
+
+            const regex = /^[A-Za-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ']+$/i;
+
+            const validoP = p.split(/ +/).every(parte => regex.test(parte));
+            console.log(validoP);
+
+            const erroP = document.getElementById('erroP');
+
+            if (validoP === false) {
+                
+                p = document.getElementById('nacao').setCustomValidity('País inválido.');
+
+                erroP.style.display = 'block';
+
+                erroP.style.color = 'red';
+
+                erroP.textContent = 'País inválido.';
+            } else {
+
+                document.getElementById('nacao').setCustomValidity('');
+
+                erroP.style.display = 'none';
+
+                erroP.textContent = '';
+            }
+        }
+
+    </script>
+</body>
